@@ -114,6 +114,12 @@ paths:
           #   application/json:
           #     schema:
           #       $ref: '#/components/schemas/Spacecraft'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         404:
           description: User not found
           content:
@@ -138,6 +144,12 @@ paths:
           #   application/json:
           #     schema:
           #       $ref: '#/components/schemas/Spacecraft'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         404:
           description: User not found
           content:
@@ -198,6 +210,62 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /authorization/user-update:
+    put:
+      tags:
+      - authorization
+      summary: Update of user
+      responses:
+        200:
+          description: User correctly updated
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: '#/components/schemas/Spacecraft'
+        400:
+          description: User data was Wrong
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: '#/components/schemas/Spacecraft'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /food-posts/get-all-posts:
+    get:
+      tags:
+        - posts
+      summary: Get all posts for user in area
+      responses:
+        200:
+          description: List with all posts
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/FoodPost'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
 components:
   schemas:
     LoginUser:
@@ -215,6 +283,8 @@ components:
     Email:
       description: The unique email
       type: string
+    FoodPost:
+      description: Object for post about food
     Error:
       type: object
       required:
