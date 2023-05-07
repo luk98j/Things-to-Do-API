@@ -2,27 +2,192 @@ openapi: '3.0.0'
 info:
   version: '1.0.0'
   title: 'Give-food-review-API'
-
+servers:
+  - url: /api/v1
 paths:
-  /spacecrafts/{spacecraftId}:
-    parameters:
-      - name: spacecraftId
-        description: The unique identifier of the spacecraft
-        in: path
+  /authorization/login:
+    post:
+      tags:
+      - authorization
+      summary: Login user
+      requestBody:
+        description: Object of login user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
         required: true
-        schema:
-          $ref: '#/components/schemas/SpacecraftId'
-    get:
-      summary: Read a spacecraft
       responses:
-        '200':
-          description: The spacecraft corresponding to the provided `spacecraftId`
+        200:
+          description: User is correctly logged in
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: '#/components/schemas/Spacecraft'
+        403:
+          description: User already log in
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Spacecraft'
+                $ref: '#/components/schemas/Error'
         404:
-          description: No spacecraft found for the provided `spacecraftId`
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /authorization/register:
+    post:
+      tags:
+      - authorization
+      summary: Register user
+      responses:
+        201:
+          description: User is correctly register
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: '#/components/schemas/Spacecraft'
+        400:
+          description: Wrong user data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /authorization/register/confirm:
+    post:
+      tags:
+      - authorization
+      summary: Confirm registration of user
+      responses:
+        200:
+          description: User is correctly register
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: '#/components/schemas/Spacecraft'
+        400:
+          description: Wrong user data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /authorization/unregister:
+    delete:
+      tags:
+      - authorization
+      summary: Unregister user
+      responses:
+        201:
+          description: User correctly unregister
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: '#/components/schemas/Spacecraft'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /authorization/unregister/confirm:
+    delete:
+      tags:
+      - authorization
+      summary: Confirm unregistration of user
+      responses:
+        200:
+          description: User correctly unregister
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: '#/components/schemas/Spacecraft'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /authorization/forgotten:
+    put:
+      tags:
+      - authorization
+      summary: Action to reset password
+      responses:
+        201:
+          description: Action for reseting password
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: '#/components/schemas/Spacecraft'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /authorization/forgotten/change:
+    put:
+      tags:
+      - authorization
+      summary: Final action to reset password
+      responses:
+        200:
+          description: Password correctly reset
+          # content:
+          #   application/json:
+          #     schema:
+          #       $ref: '#/components/schemas/Spacecraft'
+        404:
+          description: User not found
           content:
             application/json:
               schema:
@@ -35,36 +200,31 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    SpacecraftId:
-      description: The unique identifier of a spacecraft
-      type: string
-    Spacecraft:
+    LoginUser:
+      description: Login user object
       type: object
-      required:
-        - id
-        - name
-        - type
       properties:
-        id:
-          $ref: '#/components/schemas/SpacecraftId'
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-            - capsule
-            - probe
-            - satellite
-            - spaceplane
-            - station
-        description:
-          type: string
+        email:
+          $ref: '#/components/schemas/Email'
+    RegisterUser:
+      description: Register user object
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+    Email:
+      description: The unique email
+      type: string
     Error:
       type: object
       required:
-        - message
+        - messageId
+        - messageDescription
       properties:
-        message:
+        messageId:
+          description: Unique number for error
+          type: integer
+        messageDescription:
           description: A human readable error message
           type: string
   securitySchemes:
