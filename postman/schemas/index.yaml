@@ -266,10 +266,10 @@ paths:
                 $ref: '#/components/schemas/UpdateUserDataResponse'
         400:
           description: User data was wrong
-          # content:
-          #   application/json:
-          #     schema:
-          #       $ref: '#/components/schemas/Spacecraft'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         403:
           description: User not authorized
           content:
@@ -309,12 +309,12 @@ paths:
       responses:
         200:
           description: List with all posts
-          # content:
-          #   application/json:
-          #     schema:
-          #       type: array
-          #       items:
-          #        $ref: '#/components/schemas/FoodPost'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/FoodPost'
         403:
           description: User not authorized
           content:
@@ -338,11 +338,19 @@ paths:
       tags:
         - food-posts
       summary: Post object with food
+      requestBody:
+        description: Body of new post object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddPostRequest'
       responses:
         200:
           description: Correctly added post
-          # content:
-          #   application/json:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddPostResponse'
         403:
           description: User not authorized
           content:
@@ -373,11 +381,19 @@ paths:
           schema:
             type: string
           description: Unique id of post
+      requestBody:
+        description: Body of edit post object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditPostRequest'
       responses:
         200:
           description: Updated post
-          # content:
-          #   application/json:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditPostResponse'
         403:
           description: User not authorized
           content:
@@ -411,8 +427,10 @@ paths:
       responses:
         200:
           description: Deletion of post sucesful
-          # content:
-          #   application/json:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePostResponse'
         403:
           description: User not authorized
           content:
@@ -443,11 +461,19 @@ paths:
           schema:
             type: string
           description: Unique id of post
+      requestBody:
+        description: Body of action on post object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActionOnPostRequest'
       responses:
         200:
           description: Action of post sucesful
-          # content:
-          #   application/json:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionOnPostResponse'
         403:
           description: User not authorized
           content:
@@ -518,6 +544,27 @@ components:
       type: object
     UpdateUserDataResponse:
       description: Response - user update model
+      type: object
+    AddPostRequest:
+      description: Request - new post model
+      type: object
+    AddPostResponse:
+      description: Response - new post model
+      type: object
+    EditPostRequest:
+      description: Request - edit post model
+      type: object
+    EditPostResponse:
+      description: Response - edit post model 
+      type: object
+    DeletePostResponse:
+      description: Response - delete post model
+      type: object
+    ActionOnPostRequest:
+      description: Request - action on post model
+      type: object
+    ActionOnPostResponse:
+      description: Response - action on post model
       type: object
     RegisterUser:
       description: Register user object
