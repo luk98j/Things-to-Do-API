@@ -1,0 +1,591 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'Give-food-review-API'
+servers:
+  - url: /api/v1
+paths:
+  /authorization/login:
+    post:
+      tags:
+      - authorization
+      summary: Login user
+      requestBody:
+        description: Body of login user request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserRequest'
+        required: true
+      responses:
+        200:
+          description: User is correctly logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUserResponse'
+        403:
+          description: User already log in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /authorization/register:
+    post:
+      tags:
+      - authorization
+      summary: Register user (Part 1)
+      requestBody:
+        description: Body of registration object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationUserRequest'
+      responses:
+        201:
+          description: User is correctly register
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationUserResponse'
+        400:
+          description: Wrong user data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /authorization/register/confirm:
+    post:
+      tags:
+      - authorization
+      summary: Confirm registration of user (Part 2)
+      requestBody:
+        description: Body of approval registration object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationUserApprovalRequest'
+      responses:
+        200:
+          description: User is correctly register
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationUserApprovalResponse'
+        400:
+          description: Wrong user data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /authorization/unregister:
+    delete:
+      tags:
+      - authorization
+      summary: Unregister user part 1
+      requestBody:
+        description: Body of unregistration object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnregistrationUserRequest'
+      responses:
+        201:
+          description: User correctly unregister
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnregistrationUserResponse'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /authorization/unregister/confirm:
+    delete:
+      tags:
+      - authorization
+      summary: Confirm unregistration of user
+      requestBody:
+        description: Body of confirmation unregistration object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnregistrationUserConfirmRequest'
+      responses:
+        200:
+          description: User correctly unregister
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnregistrationUserConfirmResponse'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/forgotten:
+    put:
+      tags:
+      - user
+      summary: Action to reset password/send mail of login
+      requestBody:
+        description: Body of forgotten object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgottenUserDataRequest'
+      responses:
+        201:
+          description: Action for reseting password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgottenUserDataResponse'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/forgotten/change:
+    put:
+      tags:
+      - user
+      summary: Final action to reset password
+      requestBody:
+        description: Body of change forgotten object 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgottenUserDataChangeRequest'
+      responses:
+        200:
+          description: Password correctly reset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgottenUserDataChangeResponse'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/user-update:
+    put:
+      tags:
+      - user
+      summary: Update of user data
+      requestBody:
+        description: Body of update object 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDataRequest'
+      responses:
+        200:
+          description: User correctly updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUserDataResponse'
+        400:
+          description: User data was wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /food-posts/get-all-posts/{cordinationX}/{cordinationY}:
+    get:
+      tags:
+        - food-posts
+      summary: Get all posts for user in area
+      parameters:
+        - in: path
+          name: cordinationX
+          required: true
+          schema:
+            type: integer
+          description: Cordination of user X
+        - in: path
+          name: cordinationY
+          required: true
+          schema:
+            type: integer
+          description: Cordination of user Y
+      responses:
+        200:
+          description: List with all posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/FoodPost'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Data not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /food-posts/add-post:
+    post:
+      tags:
+        - food-posts
+      summary: Post object with food
+      requestBody:
+        description: Body of new post object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddPostRequest'
+      responses:
+        200:
+          description: Correctly added post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddPostResponse'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Data not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /food-posts/update-post/{post-id}:
+    put:
+      tags:
+        - food-posts
+      summary: Update post of food
+      parameters:
+        - in: path
+          name: post-id
+          required: true
+          schema:
+            type: string
+          description: Unique id of post
+      requestBody:
+        description: Body of edit post object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditPostRequest'
+      responses:
+        200:
+          description: Updated post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditPostResponse'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Data not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /food-posts/delete-post/{post-id}:
+    delete:
+      tags:
+        - food-posts
+      summary: Delete object with data about food
+      parameters:
+        - in: path
+          name: post-id
+          required: true
+          schema:
+            type: string
+          description: Unique id of post
+      responses:
+        200:
+          description: Deletion of post sucesful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePostResponse'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Data not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /food-posts/action-on-post/{post-id}:
+    delete:
+      tags:
+        - food-posts
+      summary: Endpoint for action on post (like, comment)
+      parameters:
+        - in: path
+          name: post-id
+          required: true
+          schema:
+            type: string
+          description: Unique id of post
+      requestBody:
+        description: Body of action on post object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActionOnPostRequest'
+      responses:
+        200:
+          description: Action of post sucesful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionOnPostResponse'
+        403:
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Data not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    LoginUserRequest:
+      description: Request - login user object
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+    LoginUserResponse:
+      description: Response - login user object
+      type: object
+    RegistrationUserRequest:
+      description: Request - first part registration
+      type: object
+    RegistrationUserResponse:
+      description: Response - first part registration
+      type: object
+    RegistrationUserApprovalRequest:
+      description: Request - second part registration
+      type: object
+    RegistrationUserApprovalResponse:
+      description: Response - second part registration
+      type: object
+    UnregistrationUserRequest:
+      description: Request - first part unregistration
+      type: object
+    UnregistrationUserResponse:
+      description: Response - first part unregistration
+      type: object
+    UnregistrationUserConfirmRequest:
+      description: Request - second part unregistration
+      type: object
+    UnregistrationUserConfirmResponse:
+      description: Response - second part unregistration
+      type: object
+    ForgottenUserDataRequest:
+      description: Request - first part of forgotten password/mail/login
+      type: object
+    ForgottenUserDataResponse:
+      description: Response - first part of forgotten password/mail/login
+      type: object
+    ForgottenUserDataChangeRequest:
+      description: Request - second part of forgotten passowrd
+      type: object
+    ForgottenUserDataChangeResponse:
+      description: Response - second part of forgotten password
+      type: object
+    UpdateUserDataRequest:
+      description: Request - user update model
+      type: object
+    UpdateUserDataResponse:
+      description: Response - user update model
+      type: object
+    AddPostRequest:
+      description: Request - new post model
+      type: object
+    AddPostResponse:
+      description: Response - new post model
+      type: object
+    EditPostRequest:
+      description: Request - edit post model
+      type: object
+    EditPostResponse:
+      description: Response - edit post model 
+      type: object
+    DeletePostResponse:
+      description: Response - delete post model
+      type: object
+    ActionOnPostRequest:
+      description: Request - action on post model
+      type: object
+    ActionOnPostResponse:
+      description: Response - action on post model
+      type: object
+    RegisterUser:
+      description: Register user object
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+    Email:
+      description: The unique email
+      type: string
+    FoodPost:
+      description: Object for post about food
+    Error:
+      type: object
+      required:
+        - messageId
+        - messageDescription
+      properties:
+        messageId:
+          description: Unique number for error
+          type: integer
+        messageDescription:
+          description: A human readable error message
+          type: string
