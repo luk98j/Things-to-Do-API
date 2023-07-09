@@ -469,7 +469,7 @@ paths:
               $ref: '#/components/schemas/ActionOnPostRequest'
       responses:
         200:
-          description: Action of post sucesful
+          description: Action of post successful
           content:
             application/json:
               schema:
