@@ -8,6 +8,7 @@ plugins {
 group = 'com.whatsupdev'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '20'
+targetCompatibility = '20'
 
 configurations {
 	compileOnly {
