@@ -1,5 +1,6 @@
 package com.whatsupdev.GradeFood.api.google;
 
+import com.google.maps.NearbySearchRequest;
 import com.google.maps.PlaceDetailsRequest;
 import com.google.maps.PlacesApi;
 import com.google.maps.model.PlaceIdScope;
@@ -27,7 +28,7 @@ public class GooglePlaceApi {
     private String GOOGLE_API_TYPES;
     @Value("${api.google.place.radius")
     private String GOOGLE_API_RADIUS;
-    public Mono<PlaceDetailsRequest.Response> getGooglePlaceNearRestaurants(int coordinationX, int coordinationY) {
+    public Mono<NearbySearchRequest.Response> getGooglePlaceNearRestaurants(int coordinationX, int coordinationY) {
         return webClientFactory.createWebClient(prepareUriForGooglePlaceNearbySearch(coordinationX, coordinationY))
                 .get()
                 .exchangeToMono(
@@ -35,7 +36,7 @@ public class GooglePlaceApi {
                         if (response.statusCode().isError()) {
                             return Mono.error(handle(response));
                         } else {
-                            return response.bodyToMono(PlaceDetailsRequest.Response.class);
+                            return response.bodyToMono(NearbySearchRequest.Response.class);
                         }
                     }
                 );
