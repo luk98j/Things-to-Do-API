@@ -6,6 +6,7 @@ import com.google.maps.PlacesApi;
 import com.google.maps.model.PlaceIdScope;
 import com.whatsupdev.GradeFood.configuration.WebClientFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Mono;
 
 import static com.whatsupdev.GradeFood.api.google.GoogleStatusHandler.handle;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class GooglePlaceApi {
@@ -34,6 +36,7 @@ public class GooglePlaceApi {
                 .exchangeToMono(
                     response -> {
                         if (response.statusCode().isError()) {
+                            log.error("Google api error for {} {}", coordinationX, coordinationY);
                             return Mono.error(handle(response));
                         } else {
                             return response.bodyToMono(NearbySearchRequest.Response.class);

@@ -5,5 +5,7 @@ import reactor.core.publisher.Flux;
 
 public interface PlaceDataAccess {
 
-    Flux<PlaceResultDTO> getDataForLocation(int coordinationX, int coordinationY);
+    Flux<PlaceResultDTO> getDataForLocationGoogleApi(int coordinationX, int coordinationY);
+
+    Flux<PlaceResultDTO> getDataForLocationDatabase(int coordinationX, int coordinationY);
 }

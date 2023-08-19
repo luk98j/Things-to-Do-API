@@ -16,18 +16,19 @@ public class PlaceDataAccessImpl implements PlaceDataAccess{
     private PlaceResultMapper mapper = Mappers.getMapper(PlaceResultMapper.class);
 
     @Override
-    public Flux<PlaceResultDTO> getDataForLocation(int coordinationX, int coordinationY) {
+    public Flux<PlaceResultDTO> getDataForLocationGoogleApi(int coordinationX, int coordinationY) {
         return googlePlaceApi.getGooglePlaceNearRestaurants(coordinationX, coordinationY)
-                        .flatMapMany(
-                                nearbySearchRequest ->
-                                        nearbySearchRequest.successful() ?
-                                                Flux.fromArray(nearbySearchRequest.getResult().results)
-                                                        .map(mapper::placesSearchResultToPlaceResultDTO) :
-                                                Flux.error(new Exception("Error while getting data from Google Place API"))
-                        )
-                        .onErrorResume(
-                                throwable -> Flux.error(new Exception("Error while getting data from Google Place API"))
-                        );
+                .onErrorComplete()
+                .flatMapMany(
+                        nearbySearchRequest ->
+                                        Flux.fromArray(nearbySearchRequest.getResult().results)
+                                                .map(mapper::placesSearchResultToPlaceResultDTO));
+
+    }
+
+    @Override
+    public Flux<PlaceResultDTO> getDataForLocationDatabase(int coordinationX, int coordinationY) {
+        return null;
     }
 
 }
