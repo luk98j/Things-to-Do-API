@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.whatsupdev.GradeFood.utils.ExceptionHandler.handleExceptionForController;
-
 @RestController
 @RequiredArgsConstructor
 public class FoodPostsApiImpl implements FoodPostsApi {
@@ -36,8 +34,8 @@ public class FoodPostsApiImpl implements FoodPostsApi {
     public ResponseEntity<List<Object>> foodPostsGetAllPostsCordinationXCordinationYGet(@RequestParam Integer cordinationX,
                                                                                         @RequestParam Integer cordinationY) {
         //map response from service to response entity and return it
-        foodPostService.getFoodPost(cordinationX, cordinationY)
-                .onErrorReturn(error -> handleExceptionForController(error))
+        foodPostService.getPosts(cordinationX, cordinationY)
+//                .onErrorReturn(error -> handleExceptionForController())
                 .collectSortedList()
                 .map(ResponseEntity::ok);
 
