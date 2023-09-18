@@ -1,6 +1,7 @@
-package com.whatsupdev.GradeFood.dataaccess;
+package com.whatsupdev.GradeFood.dataaccess.impl;
 
 import com.whatsupdev.GradeFood.api.google.GooglePlaceApi;
+import com.whatsupdev.GradeFood.dataaccess.PlaceDataAccess;
 import com.whatsupdev.GradeFood.dataaccess.mapper.PlaceResultMapper;
 import com.whatsupdev.GradeFood.model.dto.PlaceResultDTO;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import reactor.core.publisher.Flux;
 
 @Component
 @RequiredArgsConstructor
-public class PlaceDataAccessImpl implements PlaceDataAccess{
+public class PlaceDataAccessImpl implements PlaceDataAccess {
 
     private final GooglePlaceApi googlePlaceApi;
     private PlaceResultMapper mapper = Mappers.getMapper(PlaceResultMapper.class);
